@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.login-page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.login-panel {
+  width: min(100%, 26rem);
+}
+
+.login-heading {
+  margin: 0 0 1.25rem;
+  color: hsl(var(--p));
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-align: center;
+}
+
+.login-card {
+  width: 100%;
+  border: 2px solid hsl(var(--p));
+  box-shadow: 0 8px 24px hsl(var(--bc) / 0.12);
+}
