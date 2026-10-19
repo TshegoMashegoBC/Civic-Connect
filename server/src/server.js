@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 
 const app = require('./app');
 const connectDB = require('./config/db');
@@ -36,3 +36,4 @@ startServer().catch((error) => {
   console.error('Failed to start Civic Connect API:', error);
   process.exitCode = 1;
 });
+
