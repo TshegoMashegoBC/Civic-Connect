@@ -27,5 +27,9 @@ function createRequestController({ requestService }) {
     },
   };
 }
-
+// In a controller or route handler
+//const serviceRequest = await ServiceRequest.findById(requestId)
+ // .populate('requester_id', 'name email') // Only include name and email
+  //.populate('category_id', 'name')       // Only include the category name
+  //.populate('assignee_id', 'name');
 module.exports = createRequestController;

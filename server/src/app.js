@@ -14,6 +14,7 @@ const createStaffRoutes = require('./routes/staffRoutes');
 const errorHandler = require('./middleware/errorHandler');
 const notFound = require('./middleware/notFound');
 
+
 function createApp({
   userRepository = authRepository,
   requestRepository: requests = requestRepository,
@@ -75,4 +76,6 @@ function createApp({
   return app;
 }
 
-module.exports = { createApp, app: createApp() };
+const app = createApp();
+module.exports = app;
+module.exports.createApp = createApp;
