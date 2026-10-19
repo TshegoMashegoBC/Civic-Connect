@@ -1,0 +1,57 @@
+services:
+  civic-connect:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: civic-connect:local
+    init: true
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-10000}:10000"
+    environment:
+      NODE_ENV: development
+      SERVE_CLIENT: "true"
+      PORT: "10000"
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env.docker}
+      MONGODB_URI: ${MONGODB_URI:-mongodb+srv://busisiweradebe2025_db_user:<db_password>@cluster0.vjihdoi.mongodb.net/}
+      CLIENT_ORIGIN: ${CLIENT_ORIGIN:- http://localhost:5173/}
+      COOKIE_SAME_SITE: strict
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:10000/api/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  mongodb:
+    image: mongo:8.0
+    container_name: civicconnect-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - civic-connect-mongodb-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: busisiweradebe2025_db_user
+      MONGO_INITDB_ROOT_PASSWORD: 6TTM800U6SllSpng
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --eval
+        - "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'localhost:27017'}]}) }"
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+

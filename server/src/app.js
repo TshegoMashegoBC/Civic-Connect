@@ -2,6 +2,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
+const path = require('path');
 const authRepository = require('./repositories/userRepository');
 const requestRepository = require('./repositories/requestRepository');
 const { createAuthService } = require('./services/authService');
@@ -70,6 +71,17 @@ function createApp({
     authenticate,
     userRepository,
   }));
+
+  if (process.env.NODE_ENV === 'production' || process.env.SERVE_CLIENT === 'true') {
+    const clientBuildPath = path.resolve(__dirname, '../../client/dist');
+    app.use(express.static(clientBuildPath));
+    app.get(/^(?!\/api(?:\/|$)).*/, (_req, res, next) => {
+      res.sendFile(path.join(clientBuildPath, 'index.html'), (error) => {
+        if (error) next(error);
+      });
+    });
+  }
+
   app.use(notFound);
   app.use(errorHandler);
 

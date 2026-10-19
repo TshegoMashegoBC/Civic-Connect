@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1); // Exit process with failure
-  }
+  const mongoUri = process.env.MONGODB_URI;
+  if (!mongoUri) throw new Error('MONGODB_URI is required to connect to MongoDB.');
+
+  const conn = await mongoose.connect(mongoUri, {
+    maxPoolSize: Number(process.env.MONGO_MAX_POOL_SIZE) || 50,
+  });
+  console.log(`MongoDB Connected: ${conn.connection.host}`);
 };
 
 module.exports = connectDB;
