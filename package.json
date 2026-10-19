@@ -1,0 +1,21 @@
+{
+  "name": "civic-connect",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k \"npm run server\" \"npm run client\"",
+    "server": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server start",
+    "test": "npm run test:node && npm run test:jest",
+    "test:node": "node --test tests/api.test.js tests/requestService.test.js",
+    "test:jest": "jest --runInBand",
+    "seed:staff": "npm --prefix server run seed:staff"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "jest": "^30.0.5",
+    "supertest": "^7.1.4"
+  }
+}
